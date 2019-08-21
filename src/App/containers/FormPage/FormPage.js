@@ -5,10 +5,9 @@ import { Container } from 'reactstrap';
 import * as actions from '../../core/actions';
 import Forms from '../../components/Forms/Forms';
 
-class FormPage extends React.Component {
-
-    onSaveClick = (personName, personAge) => {
-        const personList = this.props.personList;
+function FormPage(props) {
+    const onSaveClick = (personName, personAge) => {
+        const personList = props.personList;
         const lastMemberId = personList.length ? personList[personList.length - 1].id : 0;
         const obj = {
             id: lastMemberId + 1,
@@ -16,39 +15,33 @@ class FormPage extends React.Component {
             age: personAge
         }
         const updatedList = [...personList, obj];
-        this.props.updatePersons(updatedList);
+        props.updatePersons(updatedList);
     }
 
-    handleDeletePerson = (id) => {
-        const updatedList = this.props.personList.filter(person => person.id !== id);
-        this.props.updatePersons(updatedList);
+    const handleDeletePerson = (id) => {
+        const updatedList = props.personList.filter(person => person.id !== id);
+        props.updatePersons(updatedList);
     }
 
-    render() {
-        return (
-            <Container>
-                <h1>Form Page</h1>
-                <Forms
-                    personList={this.props.personList}
-                    onSaveClick={this.onSaveClick}
-                    handleDeletePerson={this.handleDeletePerson}
-                />
-            </Container>
-        )
-    }
+    return (
+        <Container>
+            <h1>Form Page</h1>
+            <Forms
+                personList={props.personList}
+                onSaveClick={onSaveClick}
+                handleDeletePerson={handleDeletePerson}
+            />
+        </Container>
+    )
 }
+
+const mapStateToProps = state => ({ personList: state.formReducer.list })
 
 const mapDispatchToProps = (dispatch) => {
     return {
         updatePersons: (personList) => {
             dispatch(actions.updatePersons(personList))
         }
-    }
-}
-
-const mapStateToProps = (state) => {
-    return {
-        personList: state.formReducer.list
     }
 }
 
