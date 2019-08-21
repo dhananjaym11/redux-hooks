@@ -1,13 +1,19 @@
-import React from 'react';
-import { connect } from 'react-redux';
+import React, { useCallback } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Container } from 'reactstrap';
 
 import * as actions from '../../core/actions';
 import Forms from '../../components/Forms/Forms';
 
-function FormPage(props) {
+export default function FormPage(props) {
+    const personList = useSelector(state => state.formReducer.list);
+    const dispatch = useDispatch();
+    const updatePersons = useCallback(
+        (personList) => dispatch(actions.updatePersons(personList)),
+        [dispatch]
+      )
+
     const onSaveClick = (personName, personAge) => {
-        const personList = props.personList;
         const lastMemberId = personList.length ? personList[personList.length - 1].id : 0;
         const obj = {
             id: lastMemberId + 1,
@@ -15,34 +21,22 @@ function FormPage(props) {
             age: personAge
         }
         const updatedList = [...personList, obj];
-        props.updatePersons(updatedList);
+        updatePersons(updatedList);
     }
 
     const handleDeletePerson = (id) => {
-        const updatedList = props.personList.filter(person => person.id !== id);
-        props.updatePersons(updatedList);
+        const updatedList = personList.filter(person => person.id !== id);
+        updatePersons(updatedList);
     }
 
     return (
         <Container>
             <h1>Form Page</h1>
             <Forms
-                personList={props.personList}
+                personList={personList}
                 onSaveClick={onSaveClick}
                 handleDeletePerson={handleDeletePerson}
             />
         </Container>
     )
 }
-
-const mapStateToProps = state => ({ personList: state.formReducer.list })
-
-const mapDispatchToProps = (dispatch) => {
-    return {
-        updatePersons: (personList) => {
-            dispatch(actions.updatePersons(personList))
-        }
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(FormPage);
