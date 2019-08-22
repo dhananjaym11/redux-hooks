@@ -1,27 +1,25 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Container } from 'reactstrap';
 
 import usersService from '../../core/services/users.service';
 import UserList from '../../components/User/UserList';
 
-class UsersPage extends React.Component {
+function UsersPage(props) {
 
-    componentDidMount() {
-        this.props.loadUsers();
-    }
+    useEffect(() => {
+        props.loadUsers();
+    }, []);
 
-    render() {
-        return (
-            <Container>
-                <h1>Users Page</h1>
-                {
-                    this.props.data.result ?
-                        <UserList list={this.props.data.result} /> : null
-                }
-            </Container>
-        )
-    }
+    return (
+        <Container>
+            <h1>Users Page</h1>
+            {
+                props.data.result ?
+                    <UserList list={props.data.result} /> : null
+            }
+        </Container>
+    )
 }
 
 const mapDispatchToProps = (dispatch) => {
