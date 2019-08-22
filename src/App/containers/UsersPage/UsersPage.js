@@ -15,7 +15,7 @@ export default function UsersPage() {
 
     useEffect(() => {
         loadUsers();
-    }, []);
+    }, [loadUsers]);
 
     return (
         <Container>
