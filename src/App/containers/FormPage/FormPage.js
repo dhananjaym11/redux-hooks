@@ -5,13 +5,13 @@ import { Container } from 'reactstrap';
 import * as actions from '../../core/actions';
 import Forms from '../../components/Forms/Forms';
 
-export default function FormPage(props) {
+export default function FormPage() {
     const personList = useSelector(state => state.formReducer.list);
     const dispatch = useDispatch();
     const updatePersons = useCallback(
         (personList) => dispatch(actions.updatePersons(personList)),
         [dispatch]
-      )
+    )
 
     const onSaveClick = (personName, personAge) => {
         const lastMemberId = personList.length ? personList[personList.length - 1].id : 0;
